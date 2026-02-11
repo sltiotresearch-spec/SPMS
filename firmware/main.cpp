@@ -160,7 +160,7 @@ void loop(){
         case _ON_Init_4G:
             flush_buffers();
             Serial.println("state - _ON_Init_4G");
-            if(G_start_connect()){ 
+            if(G_start_connect()){
                 state = _MQTT_START;
             } else {
                 error_count++;
@@ -217,4 +217,41 @@ void loop(){
             if(detection_send){
                 for (uint8_t x = 0; x < 8; x++){
                     if(first_time || c_TP[x] != TP[x]){
-                        String data = "{'\
+                        String data = "{\'" + String(x + 1) + "\':" + (c_TP[x] ? "'false'" : "'true'") + "}";
+                        Serial.println(data);
+                        if(IIOT_Dev_kit.MQTT_PUB(&TB_Broker0, MQTT_TELE_Topic, data)){ 
+                            TP[x] = c_TP[x];
+                            detection_send = false;
+                        } else {
+                            error_count++;
+                            if(error_count > Error_count_th) restart_device();
+                        }
+                    }
+                }
+                first_time = false;
+            }
+
+            if(voltage_send){
+                float ADC = 0;
+                for(uint8_t x=0; x<10; x++){
+                    ADC += analogRead(VOLTAGE_PIN);
+                }
+                ADC /= 10.0;
+                float voltage = ADC * 220 / 2645.6;
+                if(voltage < 0) voltage = 0;
+
+                String voltage_S = String(voltage, 1);
+                String dataV = "{\'V\':" + voltage_S + "}";
+                if(IIOT_Dev_kit.MQTT_PUB(&TB_Broker0, MQTT_TELE_Topic, dataV)){
+                    voltage_send = false;
+                } else {
+                    error_count++;
+                    if(error_count > Error_count_th) restart_device();
+                }
+            }
+
+            send_data = false;
+            state = _Check_Sleep; // Stay connected
+            break;
+    }
+}
