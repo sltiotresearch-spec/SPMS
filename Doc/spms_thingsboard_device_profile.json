@@ -1,0 +1,45 @@
+{
+  "name": "SPMS",
+  "description": "",
+  "image": null,
+  "type": "DEFAULT",
+  "transportType": "MQTT",
+  "provisionType": "DISABLED",
+  "defaultRuleChainId": {
+    "entityType": "RULE_CHAIN",
+    "id": "961a9f10-86be-11ef-a937-4b01595efd8d"
+  },
+  "defaultDashboardId": null,
+  "defaultQueueName": null,
+  "provisionDeviceKey": null,
+  "firmwareId": null,
+  "softwareId": null,
+  "defaultEdgeRuleChainId": null,
+  "default": false,
+  "profileData": {
+    "configuration": {
+      "type": "DEFAULT"
+    },
+    "transportConfiguration": {
+      "type": "MQTT",
+      "deviceTelemetryTopic": "v1/devices/me/telemetry",
+      "deviceAttributesTopic": "v1/devices/me/attributes",
+      "deviceAttributesSubscribeTopic": "v1/devices/me/attributes",
+      "transportPayloadTypeConfiguration": {
+        "transportPayloadType": "JSON"
+      },
+      "sparkplug": false,
+      "sparkplugAttributesMetricNames": [
+        "Properties/*",
+        "Device Control/*",
+        "Node Control/*"
+      ],
+      "sendAckOnValidationException": false
+    },
+    "provisionConfiguration": {
+      "type": "DISABLED",
+      "provisionDeviceSecret": null
+    },
+    "alarms": null
+  }
+}
